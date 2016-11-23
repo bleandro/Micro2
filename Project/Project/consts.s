@@ -13,8 +13,8 @@
 .equ TIME_COUNTERL,             0x7840  			# 25 MILION LOW
 .equ REDLED_BASEADDRESS,        0x10000000
 .equ SWITCH_BASE_ADDRESS,       0x10000040
-.equ DISPLAY_BASE_ADDRESS1,     0x10000020
-.equ DISPLAY_BASE_ADDRESS2,     0x10000030
+.equ DISPLAY_BASE_ADDRESS1,     0x10000030
+.equ DISPLAY_BASE_ADDRESS2,     0x10000020
 
 /********************** MEMORY STORAGE **********************/
 .equ STACK,                     0x00002000

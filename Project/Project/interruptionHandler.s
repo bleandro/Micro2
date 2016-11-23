@@ -46,6 +46,10 @@ HARDWARE_EXCEPTION:						# Standardized code
 		ldw r18, 0(r16)					# Load the array value on r18
 		stwio r18, 0(r14)				# Set Display value
 
+		addi r19, r0, 2
+		beq r15, r19, SHIFTR
+	SHIFTL:
+
 		/*Swift first character of messages*/
 		#Message 2
 		srli r19, r17, 24
@@ -57,6 +61,24 @@ HARDWARE_EXCEPTION:						# Standardized code
 		movia r16, MSG_DISPLAY1
 		srli r19, r18, 24
 		slli r20, r17, 8
+		or r20, r20, r19
+		stw r20, 0(r16)
+
+	SHIFTR:
+
+		/*Swift first character of messages*/
+		#Message 2
+		andi r19, r17, 0xFF
+		slli r19, r19, 24
+		srli r20, r18, 8
+		or r20, r20, r19
+		stw r20, 0(r16)
+
+		#Message 1
+		movia r16, MSG_DISPLAY1
+		andi r19, r18, 0xFF
+		slli r19, r19, 24
+		srli r20, r17, 8
 		or r20, r20, r19
 		stw r20, 0(r16)
 
@@ -88,7 +110,8 @@ SET_INTERRUPTION:
 	movia r17, TIME_COUNTERL
 	movia r14, MASK_START
 
-	bne r15, 2, SKIP_DISPLAY_TIMER
+	addi r16, r0, 2
+	bne r15, r16, SKIP_DISPLAY_TIMER
 	#movia r13, TIME_COUNTERH_ROTATE - TO DO
 	#movia r17, TIME_COUNTERL_ROTATE - TO DO
 

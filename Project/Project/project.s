@@ -175,7 +175,7 @@ DISPLAY_MSG:
 	br BEGIN
 
 CANCEL_ROT:
-	addi r9, r0, 4
+	addi r9, r0, 2
 	blt r15, r9, BEGIN							# Only cancel if rotating
 
 	add r9, r0, r0
@@ -185,7 +185,7 @@ CANCEL_ROT:
 
 /* Numbers for 7-segments */
 MAP:
-.byte 0b111111,0b110,0b1011011,0b1001111,0b1100110,0b1101101,0b1111101,0b111,0b1111111,0b1100111
+.byte 0b00111111,0b110,0b1011011,0b1001111,0b1100110,0b1101101,0b1111101,0b111,0b1111111,0b1100111
 
 /* Storing last command */
 LASTCMD:
