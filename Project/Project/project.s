@@ -175,10 +175,6 @@ DISPLAY_MSG:
 	br BEGIN
 
 CANCEL_ROT:
-	movia r4, DISPLAY_BASE_ADDRESS1
-	stwio r0, 0(r4)									#Clear display
-	movia r4, DISPLAY_BASE_ADDRESS2
-	stwio r0, 0(r4)									#Clear display
 	addi r9, r0, 2
 	blt r15, r9, BEGIN							# Only cancel if rotating
 
