@@ -93,6 +93,9 @@ HARDWARE_EXCEPTION:						# Standardized code
 
 /**************** HANDLE PUSHBUTTON PRESS ***************/
 	HANDLE_BUTTON:
+		addi r12, r0, 2
+		blt r15, r12, CLEAR_BTN
+
 		movia r12, PUSHBUTTON_BASE_ADDRESS
 		ldwio r13, 12(r12)					# Word to buttons flags
 		andi r13, r13, 0x06
@@ -105,7 +108,10 @@ HARDWARE_EXCEPTION:						# Standardized code
 
 	INVERT_ROTATION:
 		addi r19, r0, 2
-		bne r15, r19, INVERT_R
+		beq r15, r19, INVERT_L
+		addi r19, r0, 4
+		beq r15, r19, INVERT_R
+		br CLEAR_BTN
 
 		INVERT_L:
 			addi r15, r0, 4
@@ -129,6 +135,7 @@ HARDWARE_EXCEPTION:						# Standardized code
 				br CLEAR_BTN
 
 	CLEAR_BTN:
+		movia r12, PUSHBUTTON_BASE_ADDRESS
 		stwio r0, 12(r12)							# Set interruption to button
 		br END_HANDLER
 
