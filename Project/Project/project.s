@@ -175,6 +175,10 @@ DISPLAY_MSG:
 	br BEGIN
 
 CANCEL_ROT:
+	movia r4, DISPLAY_BASE_ADDRESS1
+	stwio r0, 0(r4)									#Clear display
+	movia r4, DISPLAY_BASE_ADDRESS2
+	stwio r0, 0(r4)									#Clear display
 	addi r9, r0, 2
 	blt r15, r9, BEGIN							# Only cancel if rotating
 
@@ -187,6 +191,7 @@ CANCEL_ROT:
 MAP:
 .byte 0b00111111,0b110,0b1011011,0b1001111,0b1100110,0b1101101,0b1111101,0b111,0b1111111,0b1100111
 
+.skip 0x100
+
 /* Storing last command */
 LASTCMD:
-.skip 0x100
