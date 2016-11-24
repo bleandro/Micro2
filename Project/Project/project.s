@@ -167,7 +167,7 @@ TRIANG_NUM:
 	br BEGIN
 
 DISPLAY_MSG:
-	addi r15, r0, 2						# r15 = 2 means the MESSAGE DISPLAYED is goint to rotate to the LEFT
+	addi r15, r0, 2						# r15 = 2 means the MESSAGE DISPLAYED is going to rotate to the LEFT
 	movia sp, STACK     			# Set stack registers and
 	mov fp, sp         				# frame pointer.
 	call SET_INTERRUPTION			#	Call Function to set INTERRUPTION
