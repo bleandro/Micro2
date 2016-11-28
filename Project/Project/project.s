@@ -68,6 +68,8 @@ EXECUTE:
 	beq r9, r10, DISPLAY_MSG
 	addi r10, r0, 21
 	beq r9, r10, CANCEL_ROT
+	addi r10, r0, 30  # to extras functions, use 3
+	beq r9, r10, UP_ROT  
 
 	br BEGIN
 
@@ -168,20 +170,30 @@ TRIANG_NUM:
 
 DISPLAY_MSG:
 	addi r15, r0, 2						# r15 = 2 means the MESSAGE DISPLAYED is going to rotate to the LEFT
-	movia sp, STACK     			# Set stack registers and
-	mov fp, sp         				# frame pointer.
-	call SET_INTERRUPTION			#	Call Function to set INTERRUPTION
+	movia sp, STACK     				# Set stack registers and
+	mov fp, sp         					# frame pointer.
+	call SET_INTERRUPTION				# Call Function to set INTERRUPTION
 
 	br BEGIN
 
 CANCEL_ROT:
 	addi r9, r0, 2
-	blt r15, r9, BEGIN							# Only cancel if rotating
+	blt r15, r9, BEGIN					# Only cancel if rotating
 
 	add r9, r0, r0
-	wrctl status, r9 		  					# turn off Nios II interrupt processing ( SET PIE = 0 )
+	wrctl status, r9 		  			# turn off Nios II interrupt processing ( SET PIE = 0 )
 
 	br 	BEGIN
+
+UP_ROT:
+	addi r20, r0, 0
+	addi r15, r0, 6						# r15 = 6 means the MESSAGE DISPLAYED is going to rotate UP
+	movia sp, STACK     				# Set stack registers and
+	mov fp, sp         					# frame pointer.
+	call SET_INTERRUPTION				# Call Function to set INTERRUPTION
+
+	br BEGIN
+
 
 /* Numbers for 7-segments */
 MAP:

@@ -20,11 +20,12 @@ HARDWARE_EXCEPTION:						# Standardized code
 	movia r14, TIMER_BASEADRESS
 	sthio r0, 0(r14) 						# clear Time Out ( clear the interrupt )
 
+	addi r14, r0, 2
+	bge r15, r14, DISPLAY
+
 /********************** LED FLASH **********************/
 	movia r16, REDLED_BASEADDRESS
 	beq	r15, r0, OFF
-	addi r14, r0, 2
-	bge r15, r14, DISPLAY
 
 	ON:
 		stwio r7, 0(r16)
@@ -38,6 +39,9 @@ HARDWARE_EXCEPTION:						# Standardized code
 
 /********************* DISPLAY ROTATE *****************/
 	DISPLAY:
+		addi r14, r0, 6
+		bge r15, r14, UP_ROTATION
+
 		movia r16, MSG_DISPLAY1
 		movia r14, DISPLAY_BASE_ADDRESS1
 		ldw r17, 0(r16)					# Load the array value on r17
@@ -90,6 +94,29 @@ HARDWARE_EXCEPTION:						# Standardized code
 		stw r20, 0(r16)
 
 		br END_HANDLER
+
+/***********************UP_ROTATION***********************/
+	UP_ROTATION:
+		addi r14, r0, 12
+		bne r20, r14, SKIP_CLEAN_r20
+		add r20, r0, r0
+
+	SKIP_CLEAN_r20:
+		movia r12, DISPLAY_BASE_ADDRESS1
+		movia r14, MSG_DISPLAY1
+		ldw r14, 0(r14)
+		add r14, r14, r20
+		stwio r14, 0(r12)
+
+		movia r12, DISPLAY_BASE_ADDRESS2
+		movia r14, MSG_DISPLAY2
+		ldw r14, 0(r14)
+		add r14, r14, r20
+		stwio r14, 0(r12)
+
+		addi r20, r20, 4
+
+	br END_HANDLER
 
 /**************** HANDLE PUSHBUTTON PRESS ***************/
 	HANDLE_BUTTON:
@@ -177,7 +204,7 @@ SET_INTERRUPTION:
 	######****** Start interval timer, enable its interrupts ******######
 	sthio r17, 8(r12)  							# Set to low value
 	sthio r13, 12(r12)  						# Set to high Value
-	sthio r14, 4(r12)								# Set, START, CONT, E ITO = 1
+	sthio r14, 4(r12)							# Set, START, CONT, E ITO = 1
 
 	movia r12, PUSHBUTTON_BASE_ADDRESS
 	movi r14, 0x06								# Mask to set button
@@ -200,7 +227,18 @@ SET_INTERRUPTION:
 ret															# Return from subroutine
 
 MSG_DISPLAY1:
-.byte 0b00010000, 0b00111111, 0b00000000, 0b00000000
+.byte 0b00010000, 0b00111111, 0b00000000, 0b00000000 #iO
+# Msgs to UP_ROTATION
+MSG_DISPLAY_UP11:
+.byte 0b00100000, 0b01101010, 0b00000000, 0b00000000 #iO OK
+MSG_DISPLAY1_UP12:
+.byte 0b00000000, 0b01010101, 0b00000000, 0b00000000 #iO  OK
+
+.skip 1000
 
 MSG_DISPLAY2:
-.byte 0b01111101, 0b00000110, 0b00111111, 0b01011011
+.byte 0b01111101, 0b00000110, 0b00111111, 0b01011011 #6102
+MSG_DISPLAY_UP21:
+.byte 0b01101011, 0b00000010, 0b1101010, 0b01101001 #6102
+MSG_DISPLAY2_U22:
+.byte 0b01011001, 0b00000100, 0b01010101, 0b01001101 #6102
